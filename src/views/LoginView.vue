@@ -4,10 +4,22 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
 
+import { useUserStore } from '../stores/user.ts'
+const userStore = useUserStore()
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+import axios from 'axios'
+
 import { reactive } from 'vue'
 
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { z } from 'zod'
+
+import { useToast } from 'primevue/usetoast'
+
+const toast = useToast()
 
 const initialValues = reactive({
   email: '',
@@ -28,7 +40,33 @@ const resolver = zodResolver(
 
 const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
   if (valid) {
-    console.log('Form submitted with values:', values)
+    const { email, password } = values
+
+    axios
+      .post(
+        'https://studentlibrary.tactilelibrary.net/user/login',
+        {
+          email,
+          password,
+        },
+        {
+          responseType: 'text',
+        },
+      )
+      .then((response) => {
+        // the request worked and it returned success
+        userStore.token = response
+        router.push('/')
+      })
+      .catch((error) => {
+        console.error(error)
+        toast.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.response.data,
+          life: 3000,
+        })
+      })
   }
 }
 </script>
