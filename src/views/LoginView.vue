@@ -41,7 +41,7 @@ const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
       :initialValues
       :resolver
       :validateOnValueUpdate="true"
-      :validateOnMount="['email']"
+      :validateOnMount="true"
       @submit="onSubmit"
       class="flex flex-col gap-4 w-96"
     >
@@ -59,5 +59,6 @@ const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
       </div>
       <Button type="submit" severity="secondary" label="Login" :disabled="!$form.valid" />
     </Form>
+    <RouterLink to="/register">Don't have an account? Register instead.</RouterLink>
   </main>
 </template>

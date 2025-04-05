@@ -4,6 +4,8 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
 
+import { RouterLink } from 'vue-router'
+
 import { reactive } from 'vue'
 
 import { zodResolver } from '@primevue/forms/resolvers/zod'
@@ -12,22 +14,32 @@ import { z } from 'zod'
 const initialValues = reactive({
   email: '',
   password: '',
+  username: '',
+  confirmation: '',
 })
 
 const resolver = zodResolver(
-  z.object({
-    email: z
-      .string()
-      .min(1, { message: 'Email is required' })
-      .email({ message: 'Email is invalid' }),
-    password: z.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
-      message: 'Password is invalid',
+  z
+    .object({
+      email: z
+        .string()
+        .min(1, { message: 'Email is required' })
+        .email({ message: 'Email is invalid' }),
+      password: z.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
+        message: 'Password is invalid',
+      }),
+      username: z.string().min(1, { message: 'Name is required' }),
+      confirmation: z.string().min(1, { message: 'Confirmation is required' }),
+    })
+    .refine((data) => data.password === data.confirmation, {
+      message: 'Passwords do not match',
+      path: ['confirmation'],
     }),
-  }),
 )
 
-
 const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
+  delete values.confirmation
+
   if (valid) {
     console.log('Form submitted with values:', values)
   }
@@ -36,26 +48,26 @@ const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
 
 <template>
   <main class="flex flex-col items-center justify-center w-screen h-screen gap-4">
-    <h1 class="text-4xl font-bold mb-4">Welcome back!</h1>
+    <h1 class="text-4xl font-bold mb-4">Hello there!</h1>
     <Form
       v-slot="$form"
       :initialValues
       :resolver
       :validateOnValueUpdate="true"
-      :validateOnMount="['email']"
+      :validateOnMount="true"
       @submit="onSubmit"
       class="flex flex-col gap-4 w-96"
     >
       <div class="flex flex-col gap-1">
-        <InputText name="username" type="text" placeholder="Username" fluid autofocus />
-        <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">{{
-          $form.username.error.message
-        }}</Message>
-      </div>
-      <div class="flex flex-col gap-1">
         <InputText name="email" type="email" placeholder="Email" fluid autofocus />
         <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{
           $form.email.error.message
+        }}</Message>
+      </div>
+      <div class="flex flex-col gap-1">
+        <InputText name="username" type="text" placeholder="Name" fluid />
+        <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">{{
+          $form.username.error.message
         }}</Message>
       </div>
       <div class="flex flex-col gap-1">
@@ -65,21 +77,17 @@ const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
         }}</Message>
       </div>
       <div class="flex flex-col gap-1">
-        <InputText name="confirmation" type="password" placeholder="Confirmation" fluid autofocus />
-        <Message v-if="$form.confirmation?.invalid" severity="error" size="small" variant="simple">{{
-          $form.confirmation.error.message
-        }}</Message>
+        <InputText name="confirmation" type="password" placeholder="Confirmation" fluid />
+        <Message
+          v-if="$form.confirmation?.invalid"
+          severity="error"
+          size="small"
+          variant="simple"
+          >{{ $form.confirmation.error.message }}</Message
+        >
       </div>
-      <Button type="submit" severity="secondary" label="Login" :disabled="!$form.valid" />
+      <Button type="submit" severity="secondary" label="Register" :disabled="!$form.valid" />
     </Form>
+    <RouterLink to="/login">Already have an account? Login instead.</RouterLink>
   </main>
 </template>
-
-<!-- Constraints
-email proper email
-name not empty
-password:
-- at least 8 characters
-- must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number
-- Can contain special characters
-confirm Password(match the previous)>
