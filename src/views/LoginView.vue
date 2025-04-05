@@ -4,6 +4,8 @@ import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
 
+import { type AxiosResponse } from 'axios'
+
 import { useUserStore } from '../stores/user.ts'
 const userStore = useUserStore()
 
@@ -53,9 +55,9 @@ const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
           responseType: 'text',
         },
       )
-      .then((response) => {
+      .then((response: AxiosResponse<string>) => {
         // the request worked and it returned success
-        userStore.token = response
+        userStore.token = response.data
         router.push('/')
       })
       .catch((error) => {

@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 
 export const useUserStore = defineStore(
   'user',
   () => {
-    const token = ref(undefined)
+    const token: Ref<string | undefined> = ref(undefined)
 
     return { token }
   },
