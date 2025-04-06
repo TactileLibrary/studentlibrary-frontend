@@ -98,18 +98,24 @@ const newGroupItems = [
         :model="newGroupItems"
         fluid
       />
-      <router-link
-        v-for="item in items"
-        :key="item.id"
-        v-slot="{ href, navigate }"
-        :to="item.to"
-        custom
-      >
-        <a class="flex flex-col cursor-pointer px-4 py-2" :href="href" @click="navigate">
-          <p class="ml-2 font-bold text-lg">{{ item.name }}</p>
-          <p class="ml-2 text-sm text-surface-400">{{ item.owner }}</p>
-        </a>
-      </router-link>
+      <div class="flex flex-col gap-2 flex-grow scroll-y-auto">
+        <router-link
+          v-for="item in items"
+          :key="item.id"
+          v-slot="{ href, navigate }"
+          :to="item.to"
+          custom
+        >
+          <a
+            class="flex flex-col cursor-pointer px-4 py-2 border border-surface-500 hover:bg-surface-700 transition-color duration-100 rounded-md"
+            :href="href"
+            @click="navigate"
+          >
+            <p class="ml-2 font-bold text-lg">{{ item.name }}</p>
+            <p class="ml-2 text-sm text-surface-400">{{ item.owner }}</p>
+          </a>
+        </router-link>
+      </div>
     </div>
     <div class="flex items-center justify-start mt-4 px-4">
       <Avatar
