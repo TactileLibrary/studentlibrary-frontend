@@ -22,6 +22,9 @@ import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()
 
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
 const initialValues = reactive({
   email: '',
   password: '',
@@ -76,6 +79,7 @@ const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
           detail: response.data,
           life: 3000,
         })
+        router.push('/login')
       })
       .catch((error) => {
         console.error(error)

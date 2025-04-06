@@ -26,13 +26,13 @@ const members: Ref<{ name: string; id?: string }[]> = ref([])
 const code = ref('')
 const bannedMembers: Ref<{ name: string; id: string }[]> = ref([])
 
-function banUser(userId: string) {
+function banUser(id: string, name: string) {
   dialog.open(BanUserDialog, {
     props: {
-      header: 'Ban User',
+      header: 'Ban ' + name,
     },
     data: {
-      userId: userId,
+      userId: id,
       groupId: props.id,
     },
   })
@@ -154,7 +154,7 @@ onMounted(() => {
         id="user-actions"
         v-if="item.id && item.id != userStore.id"
       >
-        <Button label="Ban" icon="pi pi-ban" />
+        <Button label="Ban" icon="pi pi-ban" @click="banUser(item.id, item.name)" />
       </div>
     </div>
   </div>
