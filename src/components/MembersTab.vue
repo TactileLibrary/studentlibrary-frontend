@@ -56,7 +56,7 @@ function getCode() {
       if (err.status === 403) {
         code.value = ''
       } else {
-        cose.value = 'ERROR'
+        code.value = 'ERROR'
         console.log(err)
       }
     })

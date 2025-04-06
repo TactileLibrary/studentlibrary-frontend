@@ -111,7 +111,7 @@ const newGroupItems = [
     </div>
     <div class="flex items-center justify-start mt-4 px-4">
       <Avatar
-        :label="userStore.name[0].toUpperCase()"
+        :label="userStore.name?.charAt(0).toUpperCase()"
         size="large"
         shape="circle"
         class="bg-primary!"

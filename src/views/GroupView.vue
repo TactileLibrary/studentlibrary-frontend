@@ -32,7 +32,7 @@ watch(
     </TabList>
     <TabPanels>
       <TabPanel value="0"> </TabPanel>
-      <TabPanel value="1"><MembersTab :id="groupId" /></TabPanel>
+      <TabPanel value="1"><MembersTab :id="groupId as string" /></TabPanel>
     </TabPanels>
   </Tabs>
 </template>
