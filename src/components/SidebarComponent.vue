@@ -34,11 +34,13 @@ function updateGroupList() {
       },
     })
     .then((response) => {
-      items.value = response.data.map((group) => ({
-        name: group.group_name,
-        to: `/group/${group.group_id}`,
-        owner: group.group_owner,
-      }))
+      items.value = response.data.map(
+        (group: { group_name: string; group_id: string; group_owner: string }) => ({
+          name: group.group_name,
+          to: `/group/${group.group_id}`,
+          owner: group.group_owner,
+        }),
+      )
     })
     .catch((error) => {
       console.log(error)
@@ -65,7 +67,7 @@ onMounted(() => {
     })
     .catch((error) => {
       console.log(error)
-      userStore.toekn = undefined
+      userStore.token = undefined
       router.push('/login')
       toast.add({
         severity: 'error',

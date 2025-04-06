@@ -17,7 +17,7 @@ const toast = useToast()
 
 import axios from 'axios'
 
-const dialogRef = inject('dialogRef')
+const dialogRef: any = inject('dialogRef')
 
 const emit = defineEmits(['change'])
 
@@ -37,7 +37,7 @@ const resolver = ref(
   ),
 )
 
-const onFormSubmit = ({ valid, values }) => {
+const onFormSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
   if (valid) {
     axios
       .post(
