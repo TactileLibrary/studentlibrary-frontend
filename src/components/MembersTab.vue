@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref, onMounted, watch } from 'vue'
+import { defineProps, ref, onMounted, watch, type Ref } from 'vue'
 
 import axios from 'axios'
 
@@ -22,9 +22,9 @@ const toast = useToast()
 import { useDialog } from 'primevue/usedialog'
 const dialog = useDialog()
 
-const members = ref([])
+const members: Ref<{ name: string; id?: string }[]> = ref([])
 const code = ref('')
-const bannedMembers = ref([])
+const bannedMembers: Ref<{ name: string; id: string }[]> = ref([])
 
 function banUser(userId: string) {
   dialog.open(BanUserDialog, {
