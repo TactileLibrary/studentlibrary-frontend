@@ -21,6 +21,7 @@ const router = createRouter({
       name: 'Register',
       component: () => import('../views/RegisterView.vue'),
     },
+    { path: '/group/:id', name: 'Group', component: () => import('../views/GroupView.vue') },
   ],
 })
 
