@@ -35,12 +35,6 @@ onMounted(() => {
       userStore.email = undefined
       userStore.id = undefined
       router.push('/login')
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Login expired',
-        life: 3000,
-      })
     })
 })
 </script>
