@@ -3,6 +3,8 @@ import axios from 'axios'
 import { defineProps, ref, onMounted, watch, type Ref } from 'vue'
 import { useUserStore } from '../stores/user.ts'
 
+import { marked } from 'marked'
+
 import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()
@@ -13,7 +15,7 @@ const props = defineProps({
 })
 
 const activities: Ref<
-  { groupID: string; name: String; time: String; location: String; details: String }[]
+  { groupID: string; name: String; time: Date; location: String; details: String }[]
 > = ref([])
 
 function getActivities() {
@@ -28,16 +30,9 @@ function getActivities() {
     })
     .then((response) => {
       activities.value = response.data.map(
-        (activity: {
-          groupID: string
-          name: String
-          time: String
-          location: String
-          details: String
-        }) => ({
-          groupID: activity.groupID,
+        (activity: { name: String; time: String; location: Date; details: String }) => ({
           name: activity.name,
-          time: activity.time,
+          time: new Date(activity.time.replace(' ', 'T')),
           location: activity.location,
           details: activity.details,
         }),
@@ -70,14 +65,21 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-2">
     <div
-      class="flex justify-between px-4 py-2 group border border-surface-600 rounded-md"
+      class="flex flex-col px-4 py-2 group border border-surface-600 prose-xl rounded-md max-w-prose w-full mx-auto"
       v-for="item in activities"
-      :key="item.groupID"
+      :key="item.name"
     >
-      <div id="user-data" class="flex items-center gap-4">
-        <div class="text-lg font-bold">{{ item.name }}</div>
-        <div class="text-lg font-bold">{{ item.details }}</div>
+      <div class="flex flex-col items-start pb-2">
+        <h1 class="text-4xl font-bold mb-0">{{ item.name }}</h1>
+        <p class="text-sm text-surface-600">
+          {{ item.time.toLocaleString() }} - {{ item.location }}
+        </p>
       </div>
+      <div
+        class="prose prose-invert prose-xl border-t border-surface-600 prose-headings:mb-0"
+        v-html="marked.parse(item.details)"
+        v-if="item.details"
+      ></div>
     </div>
   </div>
 </template>
