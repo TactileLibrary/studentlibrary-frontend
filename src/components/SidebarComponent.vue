@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import PanelMenu from 'primevue/panelmenu'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, type Ref } from 'vue'
 import Avatar from 'primevue/avatar'
 import axios from 'axios'
 
@@ -18,7 +17,7 @@ const dialog = useDialog()
 import CreateGroupDialog from './modals/CreateGroupDialog.vue'
 import JoinGroupDialog from './modals/JoinGroupDialog.vue'
 
-const items = ref([])
+const items: Ref<{ name: string; to: string; owner: string; id: string }[]> = ref([])
 
 function updateGroupList() {
   axios
@@ -33,6 +32,7 @@ function updateGroupList() {
           name: group.group_name,
           to: `/group/${group.group_id}`,
           owner: group.group_owner,
+          id: group.group_id,
         }),
       )
     })
