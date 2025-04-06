@@ -106,8 +106,8 @@ const newGroupItems = [
         custom
       >
         <a class="flex flex-col cursor-pointer px-4 py-2" :href="href" @click="navigate">
-          <span class="ml-2 font-bold text-lg">{{ item.name }}</span>
-          <span class="ml-2 text-sm text-surface-400">{{ item.owner }}</span>
+          <p class="ml-2 font-bold text-lg">{{ item.name }}</p>
+          <p class="ml-2 text-sm text-surface-400">{{ item.owner }}</p>
         </a>
       </router-link>
     </div>
