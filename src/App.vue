@@ -8,9 +8,6 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
-import { useToast } from 'primevue/usetoast'
-const toast = useToast()
-
 import { onMounted } from 'vue'
 
 import { useUserStore } from '@/stores/user'

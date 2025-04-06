@@ -98,16 +98,18 @@ const newGroupItems = [
         :model="newGroupItems"
         fluid
       />
-      <PanelMenu :model="items">
-        <template #item="{ item }">
-          <router-link v-if="item.to" v-slot="{ href, navigate }" :to="item.to" custom>
-            <a class="flex flex-col cursor-pointer px-4 py-2" :href="href" @click="navigate">
-              <span class="ml-2 font-bold text-lg">{{ item.name }}</span>
-              <span class="ml-2 text-sm text-surface-400">{{ item.owner }}</span>
-            </a>
-          </router-link>
-        </template>
-      </PanelMenu>
+      <router-link
+        v-for="item in items"
+        :key="item.id"
+        v-slot="{ href, navigate }"
+        :to="item.to"
+        custom
+      >
+        <a class="flex flex-col cursor-pointer px-4 py-2" :href="href" @click="navigate">
+          <span class="ml-2 font-bold text-lg">{{ item.name }}</span>
+          <span class="ml-2 text-sm text-surface-400">{{ item.owner }}</span>
+        </a>
+      </router-link>
     </div>
     <div class="flex items-center justify-start mt-4 px-4">
       <Avatar
