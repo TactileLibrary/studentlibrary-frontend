@@ -5,6 +5,9 @@ import axios from 'axios'
 
 import PanelMenu from 'primevue/panelmenu'
 import Avatar from 'primevue/avatar'
+import Button from 'primevue/button'
+
+import BanUserDialog from '@/components/modals/BanUserDialog.vue'
 
 const props = defineProps({
   id: String,
@@ -15,12 +18,26 @@ import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
 
 import { useToast } from 'primevue/usetoast'
-
 const toast = useToast()
+
+import { useDialog } from 'primevue/usedialog'
+const dialog = useDialog()
 
 const members = ref([])
 const code = ref('')
 const bannedMembers = ref([])
+
+function banUser(userId: string) {
+  dialog.open(BanUserDialog, {
+    props: {
+      header: 'Ban User',
+    },
+    data: {
+      userId: userId,
+      groupId: props.id,
+    },
+  })
+}
 
 function getCode() {
   axios
@@ -124,26 +141,32 @@ onMounted(() => {
   <h1 class="text-2xl font-bold mb-4">Members ({{ members.length }})</h1>
   <PanelMenu :model="members">
     <template #item="{ item }">
-      <div class="flex justify-between px-4 py-2">
+      <div class="flex justify-between px-4 py-2 group">
         <div id="user-data" class="flex items-center gap-4">
           <Avatar :label="item.name[0].toUpperCase()" shape="circle" class="bg-primary!" />
           <div class="text-lg font-bold">{{ item.name }}</div>
         </div>
-        <div id="user-actions" v-if="item.id">wee</div>
+        <div
+          class="invisible group-hover:visible"
+          id="user-actions"
+          v-if="item.id && item.id != userStore.id"
+        >
+          <Button label="Ban" icon="pi pi-ban" />
+        </div>
       </div>
     </template>
   </PanelMenu>
   <h1 class="text-2xl font-bold my-4" v-if="bannedMembers.length">
     Banned members ({{ bannedMembers.length }})
   </h1>
-  <PanelMenu :model="bannedMembers">
+  <PanelMenu :model="bannedMembers" v-if="bannedMembers.length">
     <template #item="{ item }">
-      <div class="flex justify-between px-4 py-2">
+      <div class="flex justify-between px-4 py-2 group">
         <div id="user-data" class="flex items-center gap-4">
           <Avatar :label="item.name[0].toUpperCase()" shape="circle" class="bg-primary!" />
           <div class="text-lg font-bold">{{ item.name }}</div>
         </div>
-        <div id="user-actions">wee</div>
+        <div class="invisible group-hover:visible" id="user-actions">wee</div>
       </div>
     </template>
   </PanelMenu>

@@ -9,9 +9,6 @@ import SplitButton from 'primevue/splitbutton'
 import { useUserStore } from '../stores/user.ts'
 const userStore = useUserStore()
 
-import { useRouter } from 'vue-router'
-const router = useRouter()
-
 import { useToast } from 'primevue/usetoast'
 const toast = useToast()
 
@@ -22,9 +19,6 @@ import CreateGroupDialog from './modals/CreateGroupDialog.vue'
 import JoinGroupDialog from './modals/JoinGroupDialog.vue'
 
 const items = ref([])
-
-const name = ref('Test')
-const email = ref('wewe')
 
 function updateGroupList() {
   axios
@@ -54,29 +48,6 @@ function updateGroupList() {
 }
 
 onMounted(() => {
-  // get /user/me
-  axios
-    .get('https://studentlibrary.tactilelibrary.net/user/me', {
-      headers: {
-        Authorization: 'Bearer ' + userStore.token,
-      },
-    })
-    .then((response) => {
-      name.value = response.data.username
-      email.value = response.data.email
-    })
-    .catch((error) => {
-      console.log(error)
-      userStore.token = undefined
-      router.push('/login')
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Login expired',
-        life: 3000,
-      })
-    })
-
   updateGroupList()
 })
 
@@ -139,10 +110,15 @@ const newGroupItems = [
       </PanelMenu>
     </div>
     <div class="flex items-center justify-start mt-4 px-4">
-      <Avatar :label="name[0].toUpperCase()" size="large" shape="circle" class="bg-primary!" />
+      <Avatar
+        :label="userStore.name[0].toUpperCase()"
+        size="large"
+        shape="circle"
+        class="bg-primary!"
+      />
       <div class="ml-2">
-        <div class="text-lg font-bold">{{ name }}</div>
-        <div class="text-sm text-surface-500">{{ email }}</div>
+        <div class="text-lg font-bold">{{ userStore.name }}</div>
+        <div class="text-sm text-surface-500">{{ userStore.email }}</div>
       </div>
     </div>
   </aside>

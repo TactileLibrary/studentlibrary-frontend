@@ -5,8 +5,11 @@ export const useUserStore = defineStore(
   'user',
   () => {
     const token: Ref<string | undefined> = ref(undefined)
+    const name: Ref<string | undefined> = ref(undefined)
+    const email: Ref<string | undefined> = ref(undefined)
+    const id: Ref<string | undefined> = ref(undefined)
 
-    return { token }
+    return { token, name, email, id }
   },
   {
     persist: true,
