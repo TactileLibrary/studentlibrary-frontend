@@ -7,6 +7,7 @@ import TabPanel from 'primevue/tabpanel'
 import SidebarComponent from '../components/SidebarComponent.vue'
 
 import MembersTab from '../components/MembersTab.vue'
+import ActivitiesTab from '../components/ActivitiesTab.vue'
 
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -31,7 +32,7 @@ watch(
       <Tab value="1">Members </Tab>
     </TabList>
     <TabPanels>
-      <TabPanel value="0"> </TabPanel>
+      <TabPanel value="0"><ActivitiesTab :groupID="groupId as string" /> </TabPanel>
       <TabPanel value="1"><MembersTab :id="groupId as string" /></TabPanel>
     </TabPanels>
   </Tabs>
