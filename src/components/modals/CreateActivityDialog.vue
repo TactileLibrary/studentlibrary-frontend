@@ -52,7 +52,7 @@ const resolver = ref(
             return null
           }
 
-          return new Date(val)
+          return new Date(val as string)
         },
         z.union([
           z.date(),

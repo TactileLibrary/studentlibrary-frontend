@@ -22,7 +22,7 @@ const props = defineProps({
 const isAdmin = ref(false)
 
 const activities: Ref<
-  { groupID: string; name: String; time: Date; location: String; details: String }[]
+  { groupID: string; name: String; time: Date; location: String; details: String; id: number }[]
 > = ref([])
 
 import CreateActivityDialog from './modals/CreateActivityDialog.vue'
@@ -59,11 +59,18 @@ function getActivities() {
     })
     .then((response) => {
       activities.value = response.data.map(
-        (activity: { name: String; time: String; location: Date; details: String }) => ({
+        (activity: {
+          name: String
+          time: String
+          location: Date
+          details: String
+          id: number
+        }) => ({
           name: activity.name,
           time: new Date(activity.time.replace(' ', 'T')),
           location: activity.location,
           details: activity.details,
+          id: activity.id,
         }),
       )
     })
@@ -123,7 +130,7 @@ onMounted(() => {
     <div
       class="flex flex-col px-4 py-2 group border border-surface-600 rounded-md w-full"
       v-for="item in activities"
-      :key="item.name"
+      :key="item.id as number"
     >
       <div class="flex flex-col items-start pb-2">
         <h1 class="text-4xl font-bold mb-0">{{ item.name }}</h1>
@@ -133,7 +140,7 @@ onMounted(() => {
       </div>
       <div
         class="prose prose-invert prose-xl border-t border-surface-600 prose-headings:mb-0"
-        v-html="marked.parse(item.details)"
+        v-html="marked.parse(item.details as string)"
         v-if="item.details"
       ></div>
     </div>
