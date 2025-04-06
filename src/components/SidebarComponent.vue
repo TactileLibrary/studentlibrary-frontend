@@ -102,11 +102,11 @@ const newGroupItems = [
 </script>
 
 <template>
-  <aside class="sidebar w-80 p-4 h-full bg-surface-900 flex flex-col">
+  <aside class="sidebar w-80 py-4 h-full bg-surface-900 flex flex-col">
     <div class="mb-4 text-center">
       <h1 class="text-2xl font-bold">Student Library</h1>
     </div>
-    <div class="h-full overflow-y-scroll">
+    <div class="h-full overflow-y-auto px-4">
       <SplitButton
         @click="
           dialog.open(JoinGroupDialog, {
