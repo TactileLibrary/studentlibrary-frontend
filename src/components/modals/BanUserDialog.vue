@@ -35,7 +35,38 @@ const resolver = ref(
 
 const onFormSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
   if (valid) {
-    console.log('Form submitted:', values)
+    axios
+      .post(
+        'https://studentlibrary.tactilelibrary.net/group/ban',
+        {
+          userID: dialogRef.value.data.userId,
+          groupID: dialogRef.value.data.groupId,
+          reason: values.reason,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userStore.token}`,
+          },
+        },
+      )
+      .then(() => {
+        toast.add({
+          severity: 'success',
+          summary: 'User banned',
+          detail: 'The user has been banned successfully.',
+          life: 3000,
+        })
+        emit('change')
+        dialogRef.value.close()
+      })
+      .catch((error) => {
+        toast.add({
+          severity: 'error',
+          summary: 'Error banning user',
+          detail: error.response.data.message,
+          life: 3000,
+        })
+      })
   }
 }
 </script>
@@ -55,6 +86,6 @@ const onFormSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
         $form.reason.error?.message
       }}</Message>
     </div>
-    <Button type="submit" severity="secondary" label="Create" :disabled="!$form.valid" />
+    <Button type="submit" severity="secondary" label="Ban" :disabled="!$form.valid" />
   </Form>
 </template>

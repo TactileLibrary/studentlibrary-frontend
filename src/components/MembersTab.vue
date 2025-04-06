@@ -5,6 +5,7 @@ import axios from 'axios'
 
 import Avatar from 'primevue/avatar'
 import Button from 'primevue/button'
+import ConfirmDialog from 'primevue/confirmdialog'
 
 import BanUserDialog from '@/components/modals/BanUserDialog.vue'
 
@@ -22,6 +23,9 @@ const toast = useToast()
 import { useDialog } from 'primevue/usedialog'
 const dialog = useDialog()
 
+import { useConfirm } from 'primevue/useconfirm'
+const confirm = useConfirm()
+
 const members: Ref<{ name: string; id?: string }[]> = ref([])
 const code = ref('')
 const bannedMembers: Ref<{ name: string; id: string }[]> = ref([])
@@ -34,6 +38,65 @@ function banUser(id: string, name: string) {
     data: {
       userId: id,
       groupId: props.id,
+    },
+    emits: {
+      onChange: () => {
+        console.log('Refreshing members')
+        getMembers()
+        getBannedMembers()
+      },
+    },
+  })
+}
+
+function unbanUser(id: string, name: string) {
+  confirm.require({
+    message: `Are you sure you want to unban ${name}?`,
+    header: 'Unban confirmation',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Unban',
+    },
+    accept: () => {
+      axios
+        .post(
+          'https://studentlibrary.tactilelibrary.net/group/unban',
+          {
+            id: id,
+            groupID: props.id,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + userStore.token,
+            },
+          },
+        )
+        .then(() => {
+          toast.add({
+            severity: 'success',
+            summary: 'User unbanned',
+            detail: 'The user has been unbanned successfully.',
+            life: 3000,
+          })
+          getMembers()
+          getBannedMembers()
+        })
+        .catch((error) => {
+          toast.add({
+            severity: 'error',
+            summary: 'Error unbanning user',
+            detail: error.response.data.message,
+            life: 3000,
+          })
+          getMembers()
+          getBannedMembers()
+        })
     },
   })
 }
@@ -136,6 +199,8 @@ onMounted(() => {
 </script>
 
 <template>
+  <ConfirmDialog></ConfirmDialog>
+
   <h1 class="text-2xl font-bold mb-4" v-if="code">Invite code: {{ code }}</h1>
   <h1 class="text-2xl font-bold mb-4">Members ({{ members.length }})</h1>
 
@@ -162,20 +227,22 @@ onMounted(() => {
   <h1 class="text-2xl font-bold my-4" v-if="bannedMembers.length">
     Banned members ({{ bannedMembers.length }})
   </h1>
-  <PanelMenu :model="bannedMembers" v-if="bannedMembers.length">
-    <template #item="{ item }">
-      <div class="flex justify-between px-4 py-2 group">
-        <div id="user-data" class="flex items-center gap-4">
-          <Avatar :label="item.name[0].toUpperCase()" shape="circle" class="bg-primary!" />
-          <div class="text-lg font-bold">{{ item.name }}</div>
-        </div>
-        <div
-          class="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          id="user-actions"
-        >
-          wee
-        </div>
+  <div class="flex flex-col gap-2">
+    <div
+      class="flex justify-between px-4 py-2 group border border-surface-600 rounded-md"
+      v-for="item in bannedMembers"
+      :key="item.name"
+    >
+      <div id="user-data" class="flex items-center gap-4">
+        <Avatar :label="item.name[0].toUpperCase()" shape="circle" class="bg-primary!" />
+        <div class="text-lg font-bold">{{ item.name }}</div>
       </div>
-    </template>
-  </PanelMenu>
+      <div
+        class="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        id="user-actions"
+      >
+        <Button label="Unban" icon="pi pi-check" @click="unbanUser(item.id, item.name)" />
+      </div>
+    </div>
+  </div>
 </template>
