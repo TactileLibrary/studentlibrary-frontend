@@ -147,7 +147,7 @@ onMounted(() => {
           <div class="text-lg font-bold">{{ item.name }}</div>
         </div>
         <div
-          class="invisible group-hover:visible"
+          class="opacity-0 group-hover:opacity-100"
           id="user-actions"
           v-if="item.id && item.id != userStore.id"
         >
@@ -166,7 +166,7 @@ onMounted(() => {
           <Avatar :label="item.name[0].toUpperCase()" shape="circle" class="bg-primary!" />
           <div class="text-lg font-bold">{{ item.name }}</div>
         </div>
-        <div class="invisible group-hover:visible" id="user-actions">wee</div>
+        <div class="opacity-0 group-hover:opacity-100" id="user-actions">wee</div>
       </div>
     </template>
   </PanelMenu>
