@@ -107,7 +107,7 @@ const newGroupItems = [
           custom
         >
           <a
-            class="flex flex-col cursor-pointer px-4 py-2 border border-surface-500 hover:bg-surface-700 transition-color duration-100 rounded-md"
+            class="flex flex-col cursor-pointer px-4 py-2 border border-surface-600 hover:bg-surface-700 transition-color duration-100 rounded-md"
             :href="href"
             @click="navigate"
           >

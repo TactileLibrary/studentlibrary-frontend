@@ -3,7 +3,6 @@ import { defineProps, ref, onMounted, watch } from 'vue'
 
 import axios from 'axios'
 
-import PanelMenu from 'primevue/panelmenu'
 import Avatar from 'primevue/avatar'
 import Button from 'primevue/button'
 
@@ -139,23 +138,27 @@ onMounted(() => {
 <template>
   <h1 class="text-2xl font-bold mb-4" v-if="code">Invite code: {{ code }}</h1>
   <h1 class="text-2xl font-bold mb-4">Members ({{ members.length }})</h1>
-  <PanelMenu :model="members">
-    <template #item="{ item }">
-      <div class="flex justify-between px-4 py-2 group">
-        <div id="user-data" class="flex items-center gap-4">
-          <Avatar :label="item.name[0].toUpperCase()" shape="circle" class="bg-primary!" />
-          <div class="text-lg font-bold">{{ item.name }}</div>
-        </div>
-        <div
-          class="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          id="user-actions"
-          v-if="item.id && item.id != userStore.id"
-        >
-          <Button label="Ban" icon="pi pi-ban" />
-        </div>
+
+  <div class="flex flex-col gap-2">
+    <div
+      class="flex justify-between px-4 py-2 group border border-surface-600 rounded-md"
+      v-for="item in members"
+      :key="item.name"
+    >
+      <div id="user-data" class="flex items-center gap-4">
+        <Avatar :label="item.name[0].toUpperCase()" shape="circle" class="bg-primary!" />
+        <div class="text-lg font-bold">{{ item.name }}</div>
       </div>
-    </template>
-  </PanelMenu>
+      <div
+        class="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        id="user-actions"
+        v-if="item.id && item.id != userStore.id"
+      >
+        <Button label="Ban" icon="pi pi-ban" />
+      </div>
+    </div>
+  </div>
+
   <h1 class="text-2xl font-bold my-4" v-if="bannedMembers.length">
     Banned members ({{ bannedMembers.length }})
   </h1>
