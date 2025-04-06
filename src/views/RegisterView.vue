@@ -16,9 +16,6 @@ import { z } from 'zod'
 import { useUserStore } from '../stores/user.ts'
 const userStore = useUserStore()
 
-import { useRouter } from 'vue-router'
-const router = useRouter()
-
 import axios from 'axios'
 
 import { useToast } from 'primevue/usetoast'
@@ -37,13 +34,14 @@ const resolver = zodResolver(
     .object({
       email: z
         .string()
+        .trim()
         .min(1, { message: 'Email is required' })
         .email({ message: 'Email is invalid' }),
       password: z.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
         message: 'Password is invalid',
       }),
-      username: z.string().min(1, { message: 'Name is required' }),
-      confirmation: z.string().min(1, { message: 'Confirmation is required' }),
+      username: z.string().trim().min(1, { message: 'Name is required' }),
+      confirmation: z.string().trim().min(1, { message: 'Confirmation is required' }),
     })
     .refine((data) => data.password === data.confirmation, {
       message: 'Passwords do not match',
@@ -94,7 +92,7 @@ const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
 </script>
 
 <template>
-  <main class="flex flex-col items-center justify-center w-screen h-screen gap-4">
+  <main class="flex flex-col items-center justify-center w-full h-full gap-4">
     <h1 class="text-4xl font-bold mb-4">Hello there!</h1>
     <Form
       v-slot="$form"
