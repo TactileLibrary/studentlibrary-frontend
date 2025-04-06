@@ -71,8 +71,8 @@ const onSubmit = ({ valid, values }: { valid: boolean; values: any }) => {
         // the request worked and it returned success
         userStore.token = response.data
         toast.add({
-          severity: 'info',
-          summary: 'Info',
+          severity: 'success',
+          summary: 'Success',
           detail: response.data,
           life: 3000,
         })

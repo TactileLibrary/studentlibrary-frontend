@@ -2,8 +2,6 @@
 import { RouterView } from 'vue-router'
 import Toast from 'primevue/toast'
 import DynamicDialog from 'primevue/dynamicdialog'
-
-import SidebarComponent from './components/SidebarComponent.vue'
 </script>
 
 <template>
