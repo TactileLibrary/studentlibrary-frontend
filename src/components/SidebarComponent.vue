@@ -117,8 +117,8 @@ const newGroupItems = [
         class="bg-primary!"
       />
       <div class="ml-2">
-        <div class="text-lg font-bold">{{ userStore.name }}</div>
-        <div class="text-sm text-surface-500">{{ userStore.email }}</div>
+        <p class="text-lg font-bold">{{ userStore.name }}</p>
+        <p class="text-sm text-surface-500">{{ userStore.email }}</p>
       </div>
     </div>
   </aside>
