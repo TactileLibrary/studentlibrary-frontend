@@ -3,20 +3,49 @@ import axios from 'axios'
 import { defineProps, ref, onMounted, watch, type Ref } from 'vue'
 import { useUserStore } from '../stores/user.ts'
 
+import Button from 'primevue/button'
+
 import { marked } from 'marked'
 
 import { useToast } from 'primevue/usetoast'
 
 const toast = useToast()
 
+import { useDialog } from 'primevue/usedialog'
+const dialog = useDialog()
+
 const userStore = useUserStore()
 const props = defineProps({
   groupID: String,
 })
 
+const isAdmin = ref(false)
+
 const activities: Ref<
   { groupID: string; name: String; time: Date; location: String; details: String }[]
 > = ref([])
+
+import CreateActivityDialog from './modals/CreateActivityDialog.vue'
+
+function addActivity() {
+  dialog.open(CreateActivityDialog, {
+    props: {
+      header: 'Create new activity',
+      style: {
+        width: '500px',
+      },
+      maximizable: true,
+    },
+    data: {
+      groupID: props.groupID,
+    },
+    events: {
+      onChange: () => {
+        getActivities()
+      },
+    },
+  })
+}
 
 function getActivities() {
   axios
@@ -50,22 +79,49 @@ function getActivities() {
     })
 }
 
+function getAdmin() {
+  axios
+    .get('https://studentlibrary.tactilelibrary.net/group/admin/', {
+      headers: {
+        Authorization: 'Bearer ' + userStore.token,
+      },
+      params: {
+        groupID: props.groupID,
+      },
+    })
+    .then(() => {
+      isAdmin.value = true
+    })
+    .catch(() => {
+      isAdmin.value = false
+    })
+}
+
 watch(
   () => props.groupID,
   () => {
     getActivities()
+    getAdmin()
   },
 )
 
 onMounted(() => {
   getActivities()
+  getAdmin()
 })
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="flex flex-col gap-2 prose-xl max-w-prose mx-auto">
+    <Button
+      v-if="isAdmin"
+      label="Add Activity"
+      icon="pi pi-plus"
+      class="w-full mx-auto"
+      @click="addActivity()"
+    />
     <div
-      class="flex flex-col px-4 py-2 group border border-surface-600 prose-xl rounded-md max-w-prose w-full mx-auto"
+      class="flex flex-col px-4 py-2 group border border-surface-600 rounded-md w-full"
       v-for="item in activities"
       :key="item.name"
     >
@@ -81,5 +137,6 @@ onMounted(() => {
         v-if="item.details"
       ></div>
     </div>
+    <small class="text-sm text-surface-600 text-center"> End of activity list.</small>
   </div>
 </template>

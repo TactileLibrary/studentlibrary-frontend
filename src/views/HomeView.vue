@@ -4,5 +4,5 @@ import SidebarComponent from '../components/SidebarComponent.vue'
 
 <template>
   <SidebarComponent />
-  <main>muie profesionala</main>
+  <main></main>
 </template>

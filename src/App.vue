@@ -8,12 +8,15 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
-import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+
+import { onMounted, watch } from 'vue'
 
 import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
 
-onMounted(() => {
+function getUserData() {
   axios
     .get('https://studentlibrary.tactilelibrary.net/user/me', {
       headers: {
@@ -33,6 +36,18 @@ onMounted(() => {
       userStore.id = undefined
       router.push('/login')
     })
+}
+
+watch(
+  () => route.path,
+  () => {
+    console.log('Getting user data')
+    getUserData()
+  },
+)
+
+onMounted(() => {
+  getUserData()
 })
 </script>
 
