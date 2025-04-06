@@ -138,7 +138,7 @@ const newGroupItems = [
         </template>
       </PanelMenu>
     </div>
-    <div class="flex items-center justify-start mt-4">
+    <div class="flex items-center justify-start mt-4 px-4">
       <Avatar :label="name[0].toUpperCase()" size="large" shape="circle" class="bg-primary!" />
       <div class="ml-2">
         <div class="text-lg font-bold">{{ name }}</div>
